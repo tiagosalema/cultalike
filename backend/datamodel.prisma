@@ -1,0 +1,15 @@
+type User {
+  id: ID! @unique
+  name: String!
+  ratedMovies: [RatedMovie]!
+}
+
+type Movie {
+  id: ID! @unique
+  title: String!
+}
+
+type RatedMovie {
+  movie: Movie!
+  rate: Int!
+}
