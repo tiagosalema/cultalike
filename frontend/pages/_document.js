@@ -1,31 +1,25 @@
-import App, { Container } from "next/app";
-import Page from "../components/Page";
-import { ApolloProvider } from "react-apollo";
-import withData from "../lib/withData";
+import Document, { Head, Main, NextScript } from "next/document";
+import { ServerStyleSheet } from "styled-components";
 
-class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-    // this exposes the query to the user i.e. all the queries in the url of any page is accessible via props
-    pageProps.query = ctx.query;
-    return { pageProps };
+export default class MyDocument extends Document {
+  static getInitialProps({ renderPage }) {
+    const sheet = new ServerStyleSheet();
+    const page = renderPage(App => props =>
+      sheet.collectStyles(<App {...props} />)
+    );
+    const styleTags = sheet.getStyleElement();
+    return { ...page, styleTags };
   }
-  render() {
-    const { Component, apollo, pageProps } = this.props;
 
+  render() {
     return (
-      <Container>
-        <ApolloProvider client={apollo}>
-          <Page>
-            <Component {...pageProps} />
-          </Page>
-        </ApolloProvider>
-      </Container>
+      <html>
+        <Head>{this.props.styleTags}</Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </html>
     );
   }
 }
-
-export default withData(MyApp);
