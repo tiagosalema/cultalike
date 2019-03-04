@@ -1,11 +1,11 @@
 {
-  "name": "sick-fits-backend",
-  "description": "the backend of sick fits",
+  "name": "cultalike-backend",
+  "description": "Cultalike backend",
   "scripts": {
     "start": "nodemon -e js,graphql -x node src/index.js",
     "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
     "test": "jest",
-    "deploy": "prisma deploy --env-file variables.env"
+    "deploy": "prisma deploy"
   },
   "dependencies": {
     "babel-preset-env": "^1.7.0",

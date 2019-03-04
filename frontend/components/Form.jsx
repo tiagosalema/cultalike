@@ -28,7 +28,7 @@ const FormikApp = withFormik({
         resetForm();
       }
       setSubmitting(false);
-    }, 2000);
+    }, 500);
   }
 })(FormTemplate);
 

@@ -19,6 +19,7 @@ scalar Long
 type Movie {
   id: ID!
   title: String!
+  ratedMovie(where: RatedMovieWhereInput, orderBy: RatedMovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RatedMovie!]
 }
 
 type MovieConnection {
@@ -29,11 +30,16 @@ type MovieConnection {
 
 input MovieCreateInput {
   title: String!
+  ratedMovie: RatedMovieCreateManyWithoutMovieInput
 }
 
-input MovieCreateOneInput {
-  create: MovieCreateInput
+input MovieCreateOneWithoutRatedMovieInput {
+  create: MovieCreateWithoutRatedMovieInput
   connect: MovieWhereUniqueInput
+}
+
+input MovieCreateWithoutRatedMovieInput {
+  title: String!
 }
 
 type MovieEdge {
@@ -75,24 +81,25 @@ input MovieSubscriptionWhereInput {
   NOT: [MovieSubscriptionWhereInput!]
 }
 
-input MovieUpdateDataInput {
-  title: String
-}
-
 input MovieUpdateInput {
   title: String
+  ratedMovie: RatedMovieUpdateManyWithoutMovieInput
 }
 
-input MovieUpdateOneRequiredInput {
-  create: MovieCreateInput
-  update: MovieUpdateDataInput
-  upsert: MovieUpsertNestedInput
+input MovieUpdateOneRequiredWithoutRatedMovieInput {
+  create: MovieCreateWithoutRatedMovieInput
+  update: MovieUpdateWithoutRatedMovieDataInput
+  upsert: MovieUpsertWithoutRatedMovieInput
   connect: MovieWhereUniqueInput
 }
 
-input MovieUpsertNestedInput {
-  update: MovieUpdateDataInput!
-  create: MovieCreateInput!
+input MovieUpdateWithoutRatedMovieDataInput {
+  title: String
+}
+
+input MovieUpsertWithoutRatedMovieInput {
+  update: MovieUpdateWithoutRatedMovieDataInput!
+  create: MovieCreateWithoutRatedMovieInput!
 }
 
 input MovieWhereInput {
@@ -124,6 +131,9 @@ input MovieWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  ratedMovie_every: RatedMovieWhereInput
+  ratedMovie_some: RatedMovieWhereInput
+  ratedMovie_none: RatedMovieWhereInput
   AND: [MovieWhereInput!]
   OR: [MovieWhereInput!]
   NOT: [MovieWhereInput!]
@@ -141,7 +151,10 @@ type Mutation {
   deleteMovie(where: MovieWhereUniqueInput!): Movie
   deleteManyMovies(where: MovieWhereInput): BatchPayload!
   createRatedMovie(data: RatedMovieCreateInput!): RatedMovie!
+  updateRatedMovie(data: RatedMovieUpdateInput!, where: RatedMovieWhereUniqueInput!): RatedMovie
   updateManyRatedMovies(data: RatedMovieUpdateInput!, where: RatedMovieWhereInput): BatchPayload!
+  upsertRatedMovie(where: RatedMovieWhereUniqueInput!, create: RatedMovieCreateInput!, update: RatedMovieUpdateInput!): RatedMovie!
+  deleteRatedMovie(where: RatedMovieWhereUniqueInput!): RatedMovie
   deleteManyRatedMovies(where: RatedMovieWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
@@ -172,6 +185,7 @@ type Query {
   movie(where: MovieWhereUniqueInput!): Movie
   movies(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Movie]!
   moviesConnection(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieConnection!
+  ratedMovie(where: RatedMovieWhereUniqueInput!): RatedMovie
   ratedMovies(where: RatedMovieWhereInput, orderBy: RatedMovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RatedMovie]!
   ratedMoviesConnection(where: RatedMovieWhereInput, orderBy: RatedMovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RatedMovieConnection!
   user(where: UserWhereUniqueInput!): User
@@ -181,8 +195,10 @@ type Query {
 }
 
 type RatedMovie {
+  id: ID!
   movie: Movie!
   rate: Int!
+  rater: User!
 }
 
 type RatedMovieConnection {
@@ -192,12 +208,29 @@ type RatedMovieConnection {
 }
 
 input RatedMovieCreateInput {
-  movie: MovieCreateOneInput!
+  movie: MovieCreateOneWithoutRatedMovieInput!
   rate: Int!
+  rater: UserCreateOneWithoutRatedMoviesInput!
 }
 
-input RatedMovieCreateManyInput {
-  create: [RatedMovieCreateInput!]
+input RatedMovieCreateManyWithoutMovieInput {
+  create: [RatedMovieCreateWithoutMovieInput!]
+  connect: [RatedMovieWhereUniqueInput!]
+}
+
+input RatedMovieCreateManyWithoutRaterInput {
+  create: [RatedMovieCreateWithoutRaterInput!]
+  connect: [RatedMovieWhereUniqueInput!]
+}
+
+input RatedMovieCreateWithoutMovieInput {
+  rate: Int!
+  rater: UserCreateOneWithoutRatedMoviesInput!
+}
+
+input RatedMovieCreateWithoutRaterInput {
+  movie: MovieCreateOneWithoutRatedMovieInput!
+  rate: Int!
 }
 
 type RatedMovieEdge {
@@ -206,10 +239,10 @@ type RatedMovieEdge {
 }
 
 enum RatedMovieOrderByInput {
-  rate_ASC
-  rate_DESC
   id_ASC
   id_DESC
+  rate_ASC
+  rate_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -217,6 +250,7 @@ enum RatedMovieOrderByInput {
 }
 
 type RatedMoviePreviousValues {
+  id: ID!
   rate: Int!
 }
 
@@ -239,15 +273,76 @@ input RatedMovieSubscriptionWhereInput {
 }
 
 input RatedMovieUpdateInput {
-  movie: MovieUpdateOneRequiredInput
+  movie: MovieUpdateOneRequiredWithoutRatedMovieInput
+  rate: Int
+  rater: UserUpdateOneRequiredWithoutRatedMoviesInput
+}
+
+input RatedMovieUpdateManyWithoutMovieInput {
+  create: [RatedMovieCreateWithoutMovieInput!]
+  delete: [RatedMovieWhereUniqueInput!]
+  connect: [RatedMovieWhereUniqueInput!]
+  disconnect: [RatedMovieWhereUniqueInput!]
+  update: [RatedMovieUpdateWithWhereUniqueWithoutMovieInput!]
+  upsert: [RatedMovieUpsertWithWhereUniqueWithoutMovieInput!]
+}
+
+input RatedMovieUpdateManyWithoutRaterInput {
+  create: [RatedMovieCreateWithoutRaterInput!]
+  delete: [RatedMovieWhereUniqueInput!]
+  connect: [RatedMovieWhereUniqueInput!]
+  disconnect: [RatedMovieWhereUniqueInput!]
+  update: [RatedMovieUpdateWithWhereUniqueWithoutRaterInput!]
+  upsert: [RatedMovieUpsertWithWhereUniqueWithoutRaterInput!]
+}
+
+input RatedMovieUpdateWithoutMovieDataInput {
+  rate: Int
+  rater: UserUpdateOneRequiredWithoutRatedMoviesInput
+}
+
+input RatedMovieUpdateWithoutRaterDataInput {
+  movie: MovieUpdateOneRequiredWithoutRatedMovieInput
   rate: Int
 }
 
-input RatedMovieUpdateManyInput {
-  create: [RatedMovieCreateInput!]
+input RatedMovieUpdateWithWhereUniqueWithoutMovieInput {
+  where: RatedMovieWhereUniqueInput!
+  data: RatedMovieUpdateWithoutMovieDataInput!
+}
+
+input RatedMovieUpdateWithWhereUniqueWithoutRaterInput {
+  where: RatedMovieWhereUniqueInput!
+  data: RatedMovieUpdateWithoutRaterDataInput!
+}
+
+input RatedMovieUpsertWithWhereUniqueWithoutMovieInput {
+  where: RatedMovieWhereUniqueInput!
+  update: RatedMovieUpdateWithoutMovieDataInput!
+  create: RatedMovieCreateWithoutMovieInput!
+}
+
+input RatedMovieUpsertWithWhereUniqueWithoutRaterInput {
+  where: RatedMovieWhereUniqueInput!
+  update: RatedMovieUpdateWithoutRaterDataInput!
+  create: RatedMovieCreateWithoutRaterInput!
 }
 
 input RatedMovieWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   movie: MovieWhereInput
   rate: Int
   rate_not: Int
@@ -257,9 +352,14 @@ input RatedMovieWhereInput {
   rate_lte: Int
   rate_gt: Int
   rate_gte: Int
+  rater: UserWhereInput
   AND: [RatedMovieWhereInput!]
   OR: [RatedMovieWhereInput!]
   NOT: [RatedMovieWhereInput!]
+}
+
+input RatedMovieWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {
@@ -282,7 +382,16 @@ type UserConnection {
 
 input UserCreateInput {
   name: String!
-  ratedMovies: RatedMovieCreateManyInput
+  ratedMovies: RatedMovieCreateManyWithoutRaterInput
+}
+
+input UserCreateOneWithoutRatedMoviesInput {
+  create: UserCreateWithoutRatedMoviesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutRatedMoviesInput {
+  name: String!
 }
 
 type UserEdge {
@@ -326,7 +435,23 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
-  ratedMovies: RatedMovieUpdateManyInput
+  ratedMovies: RatedMovieUpdateManyWithoutRaterInput
+}
+
+input UserUpdateOneRequiredWithoutRatedMoviesInput {
+  create: UserCreateWithoutRatedMoviesInput
+  update: UserUpdateWithoutRatedMoviesDataInput
+  upsert: UserUpsertWithoutRatedMoviesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutRatedMoviesDataInput {
+  name: String
+}
+
+input UserUpsertWithoutRatedMoviesInput {
+  update: UserUpdateWithoutRatedMoviesDataInput!
+  create: UserCreateWithoutRatedMoviesInput!
 }
 
 input UserWhereInput {

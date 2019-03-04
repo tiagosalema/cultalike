@@ -172,7 +172,7 @@ var FormikApp = Object(formik__WEBPACK_IMPORTED_MODULE_1__["withFormik"])({
       }
 
       setSubmitting(false);
-    }, 2000);
+    }, 500);
   }
 })(FormTemplate);
 /* harmony default export */ __webpack_exports__["default"] = (FormikApp);
