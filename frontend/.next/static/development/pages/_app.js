@@ -327,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "endpoint", function() { return endpoint; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "perPage", function() { return perPage; });
 // This is client side config only - don't put anything in here that shouldn't be public!
-var endpoint = "http://localhost:4000"; // export const prodEndpoint = `https://sickfits-yoga-prod.herokuapp.com/`;
+var endpoint = "http://localhost:4000/"; // export const prodEndpoint = `https://sickfits-yoga-prod.herokuapp.com/`;
 
 var perPage = 4;
 
@@ -354,7 +354,7 @@ var productionEndpoint = "";
 function createClient(_ref) {
   var headers = _ref.headers;
   return new apollo_boost__WEBPACK_IMPORTED_MODULE_1__["default"]({
-    uri:  true ? _config__WEBPACK_IMPORTED_MODULE_2__["endpoint"] : undefined,
+    uri:  false ? undefined : _config__WEBPACK_IMPORTED_MODULE_2__["endpoint"],
     request: function request(operation) {
       operation.setContext({
         fetchOptions: {

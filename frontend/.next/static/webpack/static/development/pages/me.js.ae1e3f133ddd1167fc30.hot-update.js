@@ -22,7 +22,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral */ "./node_modules/@babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var apollo_boost__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! apollo-boost */ "./node_modules/apollo-boost/lib/bundle.esm.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/src/index.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.esm.js");
 
 
@@ -51,7 +52,7 @@ function _templateObject() {
 
 
 
-var ADD_MOVIE_MUTATION = Object(apollo_boost__WEBPACK_IMPORTED_MODULE_11__["gql"])(_templateObject());
+var ADD_MOVIE_MUTATION = graphql_tag__WEBPACK_IMPORTED_MODULE_11___default()(_templateObject());
 
 var Form =
 /*#__PURE__*/
@@ -87,18 +88,17 @@ function (_Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(_this.state);
                 e.preventDefault();
-                _context.next = 4;
+                _context.next = 3;
                 return addMovie({
                   variables: _this.state
                 });
 
-              case 4:
+              case 3:
                 res = _context.sent;
                 console.log(res);
 
-              case 6:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -132,7 +132,7 @@ function (_Component) {
         variables: this.state,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 33
+          lineNumber: 32
         },
         __self: this
       }, function (addMovie, payload) {
@@ -142,7 +142,7 @@ function (_Component) {
           },
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 36
+            lineNumber: 35
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_10___default.a.createElement("input", {
@@ -153,7 +153,7 @@ function (_Component) {
           onChange: _this2.handleChange,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 37
+            lineNumber: 36
           },
           __self: this
         }), react__WEBPACK_IMPORTED_MODULE_10___default.a.createElement("input", {
@@ -164,14 +164,14 @@ function (_Component) {
           onChange: _this2.handleChange,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 44
+            lineNumber: 43
           },
           __self: this
         }), react__WEBPACK_IMPORTED_MODULE_10___default.a.createElement("button", {
           type: "submit",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 51
+            lineNumber: 50
           },
           __self: this
         }, "Add rate"));
@@ -223,4 +223,4 @@ function (_Component) {
 /***/ })
 
 })
-//# sourceMappingURL=me.js.40dadf91d95816ae95fd.hot-update.js.map
+//# sourceMappingURL=me.js.ae1e3f133ddd1167fc30.hot-update.js.map

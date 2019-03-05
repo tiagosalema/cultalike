@@ -1,8 +1,6 @@
 require("dotenv").config();
 const createServer = require("./createServer");
-
 const server = createServer();
-const cors = { credentials: true, origin: process.env.FRONTEND_URL };
 
 // const errorHandler = (err, req, res, next) => {
 //   if (res.headersSent) {
@@ -14,6 +12,13 @@ const cors = { credentials: true, origin: process.env.FRONTEND_URL };
 
 // server.express.use(errorHandler);
 
-server.start({ cors }, deets =>
-  console.log(`Server is running on http://localhost:${deets.port}`)
+server.start(
+  {
+    cors: {
+      credentials: true,
+      origin: process.env.FRONTEND_URL
+    }
+  },
+  deets =>
+    console.log(`Server is running on http://localhost:${deets.port}, my guy`)
 );

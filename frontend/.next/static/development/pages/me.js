@@ -25449,7 +25449,7 @@ var Me = function Me() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /*!************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Fme&absolutePagePath=C%3A%5CUsers%5Ctiago%5COneDrive%5CDocuments%5C_Projects%5Capp%5Cfrontend%5Cpages%5Cme.jsx ***!
   \************************************************************************************************************************************************************/
@@ -25472,5 +25472,5 @@ module.exports = dll_92862a29917dee4fb2b1;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js"]]]));;
+},[[2,"static/runtime/webpack.js"]]]));;
 //# sourceMappingURL=me.js.map
