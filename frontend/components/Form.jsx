@@ -4,6 +4,8 @@ import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
 import { Component } from "react";
 
+import { GET_MOVIES_QUERY } from "./Movies";
+
 const ADD_MOVIE_MUTATION = gql`
   mutation ADD_MOVIE_MUTATION($title: String!) {
     createMovie(data: { title: $title }) {
@@ -16,21 +18,42 @@ const ADD_MOVIE_MUTATION = gql`
 class Form extends Component {
   state = {
     title: "Filme 3",
-    rate: "100"
+    rate: 10
   };
   handleSubmit = async (e, addMovie) => {
     e.preventDefault();
     const res = await addMovie({ variables: this.state });
-    console.log(res);
   };
   handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value });
+    const { name, value, type } = target;
+    const val = type === "number" ? parseFloat(value) : value;
+    this.setState({ [name]: val });
+  };
+  handleUpdate = (cache, payload) => {
+    console.log({ cache }, { payload });
+
+    const data = cache.readQuery({ query: GET_MOVIES_QUERY });
+    data.movies.push(payload.data.createMovie);
+    cache.writeQuery({ query: GET_MOVIES_QUERY, data });
   };
   render() {
     return (
-      <Mutation mutation={ADD_MOVIE_MUTATION} variables={this.state}>
-        {(addMovie, payload) => {
+      <Mutation
+        mutation={ADD_MOVIE_MUTATION}
+        variables={this.state}
+        update={this.handleUpdate}
+        optimisticResponse={{
+          __typename: "Mutation",
+          createMovie: {
+            __typename: "Movie",
+            id: "cjswkyxg517bpski7cz119xvv",
+            title: this.state.title
+          }
+        }}
+      >
+        {(addMovie, { loading, error }) => {
+          // if (loading) return <p>Loading...</p>;
+          if (error) return <p>Error, my dude!!</p>;
           return (
             <form onSubmit={e => this.handleSubmit(e, addMovie)}>
               <input
@@ -47,7 +70,9 @@ class Form extends Component {
                 value={this.state.rate}
                 onChange={this.handleChange}
               />
-              <button type="submit">Add rate</button>
+              <button disabled={loading} type="submit">
+                Add rate
+              </button>
             </form>
           );
         }}

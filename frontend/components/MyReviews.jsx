@@ -3,7 +3,7 @@ import Movies from "./Movies";
 
 const MyReviews = () => (
   <React.Fragment>
-    <Form title="aaa" rate="2" />
+    <Form />
     <Movies />
   </React.Fragment>
 );

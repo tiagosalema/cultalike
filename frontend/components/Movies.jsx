@@ -1,6 +1,7 @@
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import styled from "styled-components";
+import DeleteMovie from "./DeleteMovie";
 
 const Table = styled.table`
   table {
@@ -12,7 +13,7 @@ const Table = styled.table`
   td,
   th {
     border: 1px solid #dddddd;
-    text-align: left;
+    text-align: center;
     padding: 8px;
   }
 
@@ -41,6 +42,7 @@ const Movies = () => (
             <tr>
               <th>Movie</th>
               <th>Rate</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +50,9 @@ const Movies = () => (
               <tr key={movie.id}>
                 <td>{movie.title}</td>
                 <td>10</td>
+                <td>
+                  <DeleteMovie>x</DeleteMovie>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -58,3 +63,4 @@ const Movies = () => (
 );
 
 export default Movies;
+export { GET_MOVIES_QUERY };
