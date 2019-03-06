@@ -51,7 +51,7 @@ const Movies = () => (
                 <td>{movie.title}</td>
                 <td>10</td>
                 <td>
-                  <DeleteMovie>x</DeleteMovie>
+                  <DeleteMovie id={movie.id} />
                 </td>
               </tr>
             ))}

@@ -30,8 +30,6 @@ class Form extends Component {
     this.setState({ [name]: val });
   };
   handleUpdate = (cache, payload) => {
-    console.log({ cache }, { payload });
-
     const data = cache.readQuery({ query: GET_MOVIES_QUERY });
     data.movies.push(payload.data.createMovie);
     cache.writeQuery({ query: GET_MOVIES_QUERY, data });
