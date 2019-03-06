@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
-import { GET_MOVIES_QUERY } from "./Movies";
+import { ALL_MOVIES_QUERY } from "./Movies";
 
 const DELETE_MOVIE_MUTATION = gql`
   mutation DELETE_MOVIE_MUTATION($id: ID!) {
@@ -13,13 +13,13 @@ const DELETE_MOVIE_MUTATION = gql`
 
 class DeleteMovie extends Component {
   handleUpdate = (cache, payload) => {
-    const data = cache.readQuery({ query: GET_MOVIES_QUERY });
+    const data = cache.readQuery({ query: ALL_MOVIES_QUERY });
     console.log(data, payload);
 
     data.movies = data.movies.filter(
       movie => movie.id !== payload.data.deleteMovie.id
     );
-    cache.writeQuery({ query: GET_MOVIES_QUERY, data });
+    cache.writeQuery({ query: ALL_MOVIES_QUERY, data });
   };
 
   render() {

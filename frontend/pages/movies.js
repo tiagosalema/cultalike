@@ -1,3 +1,5 @@
-const Movies = props => <h1>Movies</h1>;
+import Movies from "../components/Movies";
 
-export default Movies;
+const MoviesPage = () => <Movies />;
+
+export default MoviesPage;

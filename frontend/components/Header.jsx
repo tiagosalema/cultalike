@@ -20,7 +20,7 @@ const Header = () => (
     <Linking to="/" title="Home" />
     <Linking to="/users" title="Users" />
     <Linking to="/movies" title="Movies" />
-    <Linking to="/me" title="My Reviews" />
+    <Linking to="/myReviews" title="My Reviews" />
   </StyledHeader>
 );
 

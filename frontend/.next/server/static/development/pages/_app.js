@@ -158,7 +158,7 @@ var Header = function Header() {
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_common_Linking__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    to: "/me",
+    to: "/myReviews",
     title: "My Reviews",
     __source: {
       fileName: _jsxFileName,

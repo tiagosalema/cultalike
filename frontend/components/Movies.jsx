@@ -22,8 +22,8 @@ const Table = styled.table`
   }
 `;
 
-const GET_MOVIES_QUERY = gql`
-  query GET_MOVIES_QUERY {
+const ALL_MOVIES_QUERY = gql`
+  query ALL_MOVIES_QUERY {
     movies {
       id
       title
@@ -32,7 +32,7 @@ const GET_MOVIES_QUERY = gql`
 `;
 
 const Movies = () => (
-  <Query query={GET_MOVIES_QUERY}>
+  <Query query={ALL_MOVIES_QUERY}>
     {({ data, error, loading }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error, my guy: {error.message}</p>;
@@ -41,7 +41,6 @@ const Movies = () => (
           <thead>
             <tr>
               <th>Movie</th>
-              <th>Rate</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -49,7 +48,6 @@ const Movies = () => (
             {data.movies.map(movie => (
               <tr key={movie.id}>
                 <td>{movie.title}</td>
-                <td>10</td>
                 <td>
                   <DeleteMovie id={movie.id} />
                 </td>
@@ -63,4 +61,4 @@ const Movies = () => (
 );
 
 export default Movies;
-export { GET_MOVIES_QUERY };
+export { ALL_MOVIES_QUERY };

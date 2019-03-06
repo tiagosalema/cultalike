@@ -4,7 +4,7 @@ import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
 import { Component } from "react";
 
-import { GET_MOVIES_QUERY } from "./Movies";
+import { ALL_MOVIES_QUERY } from "./Movies";
 
 const ADD_MOVIE_MUTATION = gql`
   mutation ADD_MOVIE_MUTATION($title: String!) {
@@ -30,9 +30,9 @@ class Form extends Component {
     this.setState({ [name]: val });
   };
   handleUpdate = (cache, payload) => {
-    const data = cache.readQuery({ query: GET_MOVIES_QUERY });
+    const data = cache.readQuery({ query: ALL_MOVIES_QUERY });
     data.movies.push(payload.data.createMovie);
-    cache.writeQuery({ query: GET_MOVIES_QUERY, data });
+    cache.writeQuery({ query: ALL_MOVIES_QUERY, data });
   };
   render() {
     return (
