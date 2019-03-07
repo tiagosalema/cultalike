@@ -4,7 +4,7 @@ import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
 import { Component } from "react";
 
-import { ALL_MOVIES_QUERY } from "./Movies";
+import { ALL_MOVIES_QUERY } from "./ReviewedMovies";
 
 const ADD_MOVIE_MUTATION = gql`
   mutation ADD_MOVIE_MUTATION($title: String!) {

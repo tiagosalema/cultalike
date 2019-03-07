@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
-import { ALL_MOVIES_QUERY } from "./Movies";
+import { ALL_MOVIES_QUERY } from "./ReviewedMovies";
 
 const DELETE_MOVIE_MUTATION = gql`
   mutation DELETE_MOVIE_MUTATION($id: ID!) {

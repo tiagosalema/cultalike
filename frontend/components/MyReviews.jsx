@@ -1,10 +1,10 @@
 import Form from "./Form";
-import Movies from "./Movies";
+import ReviewedMovies from "./ReviewedMovies";
 
 const MyReviews = () => (
   <React.Fragment>
     <Form />
-    <Movies />
+    <ReviewedMovies />
   </React.Fragment>
 );
 
