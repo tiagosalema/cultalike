@@ -1,5 +1,6 @@
 {
   "workbench.colorCustomizations": {
-    "scrollbarSlider.background": "#3365c0"
+    "titleBar.activeBackground": "#636d0f86",
+    "titleBar.inactiveBackground": "#646d0f"
   }
 }
