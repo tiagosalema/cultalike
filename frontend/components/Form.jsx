@@ -1,27 +1,35 @@
 import React from "react";
-// import { withFormik, Form, Field } from "formik";
 import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
 import { Component } from "react";
 
 import { getMovies } from "../lib/fetchMovies";
 
-import { ALL_MOVIES_QUERY } from "./ReviewedMovies";
+import { ALL_REVIEWED_MOVIES_QUERY } from "./ReviewedMovies";
 import DisplaySearch from "./DisplaySearch";
 
-const ADD_MOVIE_MUTATION = gql`
-  mutation ADD_MOVIE_MUTATION($title: String!) {
-    createMovie(data: { title: $title }) {
+const ADD_REVIEWED_MOVIE_MUTATION = gql`
+  mutation ADD_REVIEWED_MOVIE_MUTATION($title: String!, $rate: Int!) {
+    createRatedMovie(
+      data: {
+        movie: $title
+        rater: { connect: { id: "cjsug50e1fv830b87zxjtijfs" } }
+        rate: $rate
+      }
+    ) {
       id
-      title
+      movie
+      rate
+      rater {
+        name
+      }
     }
   }
 `;
 
 class Form extends Component {
   state = {
-    title: "",
-    rate: "",
+    inputs: { title: "", rate: "" },
     movies: {}
   };
 
@@ -31,53 +39,58 @@ class Form extends Component {
       .catch(err => console.log(err));
   }
 
-  handleSubmit = async (e, addMovie) => {
+  handleSubmit = async (e, addRatedMovie) => {
     e.preventDefault();
-    const res = await addMovie({ variables: this.state });
+    const res = await addRatedMovie({ variables: this.state.inputs });
   };
 
   handleChange = ({ target }) => {
     const { name, value, type } = target;
     const val = type === "number" ? parseFloat(value) : value;
-    this.setState({ [name]: val });
+    const inputs = { ...this.state.inputs, [name]: val };
+    this.setState({ inputs });
   };
 
   handleUpdate = (cache, payload) => {
-    const data = cache.readQuery({ query: ALL_MOVIES_QUERY });
-    data.movies.push(payload.data.createMovie);
-    cache.writeQuery({ query: ALL_MOVIES_QUERY, data });
+    const data = cache.readQuery({ query: ALL_REVIEWED_MOVIES_QUERY });
+    data.ratedMovies.push(payload.data.createRatedMovie);
+    cache.writeQuery({ query: ALL_REVIEWED_MOVIES_QUERY, data });
   };
 
   render() {
+    const {
+      movies,
+      inputs: { title, rate }
+    } = this.state;
     return (
       <Mutation
-        mutation={ADD_MOVIE_MUTATION}
-        variables={this.state}
+        mutation={ADD_REVIEWED_MOVIE_MUTATION}
+        variables={this.state.input}
         update={this.handleUpdate}
         optimisticResponse={{
           __typename: "Mutation",
-          createMovie: {
-            __typename: "Movie",
+          createRatedMovie: {
+            __typename: "RatedMovie",
             id: "cjswkyxg517bpski7cz119xvv",
-            title: this.state.title
+            movie: title,
+            rate: rate,
+            rater: { __typename: "User", name: "tiago" }
           }
         }}
       >
-        {(addMovie, { loading, error }) => {
-          const { movies, title, rate } = this.state;
-
+        {(addRatedMovie, { loading, error }) => {
           // if (loading) return <p>Loading...</p>;
           if (error) return <p>Error, my dude!!</p>;
           return (
             <React.Fragment>
-              <form onSubmit={e => this.handleSubmit(e, addMovie)}>
+              <form onSubmit={e => this.handleSubmit(e, addRatedMovie)}>
                 <input
                   list="suggestions"
                   autoComplete="off"
                   type="text"
                   name="title"
                   placeholder="Movie"
-                  value={this.state.title}
+                  value={title}
                   onChange={this.handleChange}
                 />
                 {movies.length && title.length ? (
@@ -90,7 +103,7 @@ class Form extends Component {
                   value={rate}
                   onChange={this.handleChange}
                 />
-                <button disabled={loading} type="submit">
+                <button disabled={loading} type="submit" disabled={loading}>
                   Add rate
                 </button>
               </form>
@@ -104,8 +117,10 @@ class Form extends Component {
 
 export default Form;
 
+// import { withFormik, Form, Field } from "formik";
+
 // const FormTemplate = ({ values, isSubmitting, handleSubmit }) => (
-//   <Mutation mutation={ADD_MOVIE_MUTATION} variables={values}>
+//   <Mutation mutation={ADD_REVIEWED_MOVIE_MUTATION} variables={values}>
 //     {(addMovie, payload) => {
 //       return (
 //         <form onSubmit={() => handleSubmit(addMovie)}>

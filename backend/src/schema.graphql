@@ -34,8 +34,6 @@ type Mutation {
 type Query {
   users: [User]!
   user(where: UserWhereUniqueInput!): User
-  movies: [Movie]!
-  movie(where: MovieWhereUniqueInput!): Movie
   ratedMovies: [RatedMovie]!
   ratedMovie(where: RatedMovieWhereUniqueInput!): RatedMovie
 }

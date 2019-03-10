@@ -23,11 +23,15 @@ const Table = styled.table`
   }
 `;
 
-const ALL_MOVIES_QUERY = gql`
-  query ALL_MOVIES_QUERY {
-    movies {
+const ALL_REVIEWED_MOVIES_QUERY = gql`
+  query ALL_REVIEWED_MOVIES_QUERY {
+    ratedMovies {
       id
-      title
+      movie
+      rate
+      rater {
+        name
+      }
     }
   }
 `;
@@ -51,7 +55,7 @@ class ReviewedMovies extends Component {
   }
   render() {
     return (
-      <Query query={ALL_MOVIES_QUERY}>
+      <Query query={ALL_REVIEWED_MOVIES_QUERY}>
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error, my guy: {error.message}</p>;
@@ -66,12 +70,12 @@ class ReviewedMovies extends Component {
                 </tr>
               </thead>
               <tbody>
-                {data.movies.map(movie => (
-                  <tr key={movie.id}>
-                    <td>{movie.title}</td>
-                    <td>10</td>
+                {data.ratedMovies.map(ratedMovie => (
+                  <tr key={ratedMovie.id}>
+                    <td>{ratedMovie.movie}</td>
+                    <td>{ratedMovie.rate}</td>
                     <td>
-                      <DeleteMovie id={movie.id} />
+                      <DeleteMovie id={ratedMovie.id} />
                     </td>
                   </tr>
                 ))}
@@ -85,4 +89,4 @@ class ReviewedMovies extends Component {
 }
 
 export default ReviewedMovies;
-export { ALL_MOVIES_QUERY };
+export { ALL_REVIEWED_MOVIES_QUERY };

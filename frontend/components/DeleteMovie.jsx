@@ -1,11 +1,11 @@
 import { Component } from "react";
 import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
-import { ALL_MOVIES_QUERY } from "./ReviewedMovies";
+import { ALL_REVIEWED_MOVIES_QUERY } from "./ReviewedMovies";
 
-const DELETE_MOVIE_MUTATION = gql`
-  mutation DELETE_MOVIE_MUTATION($id: ID!) {
-    deleteMovie(where: { id: $id }) {
+const DELETE_RATED_MOVIE_MUTATION = gql`
+  mutation DELETE_RATED_MOVIE_MUTATION($id: ID!) {
+    deleteRatedMovie(where: { id: $id }) {
       id
     }
   }
@@ -13,32 +13,30 @@ const DELETE_MOVIE_MUTATION = gql`
 
 class DeleteMovie extends Component {
   handleUpdate = (cache, payload) => {
-    const data = cache.readQuery({ query: ALL_MOVIES_QUERY });
-    console.log(data, payload);
-
-    data.movies = data.movies.filter(
-      movie => movie.id !== payload.data.deleteMovie.id
+    const data = cache.readQuery({ query: ALL_REVIEWED_MOVIES_QUERY });
+    data.ratedMovies = data.ratedMovies.filter(
+      ratedMovie => ratedMovie.id !== payload.data.deleteRatedMovie.id
     );
-    cache.writeQuery({ query: ALL_MOVIES_QUERY, data });
+    cache.writeQuery({ query: ALL_REVIEWED_MOVIES_QUERY, data });
   };
 
   render() {
     return (
       <Mutation
-        mutation={DELETE_MOVIE_MUTATION}
+        mutation={DELETE_RATED_MOVIE_MUTATION}
         variables={{ id: this.props.id }}
         update={this.handleUpdate}
         optimisticResponse={{
           __typename: "Mutation",
-          deleteMovie: {
-            __typename: "Movie",
+          deleteRatedMovie: {
+            __typename: "RatedMovie",
             id: this.props.id
           }
         }}
       >
-        {(deleteMovie, { error }) => {
+        {(deleteRatedMovie, { error }) => {
           if (error) return "Erro em DeleteMovie.jsx";
-          return <button onClick={() => deleteMovie()}>x</button>;
+          return <button onClick={() => deleteRatedMovie()}>x</button>;
         }}
       </Mutation>
     );
