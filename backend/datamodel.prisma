@@ -8,12 +8,12 @@ type User {
 type Movie {
   id: ID! @unique
   title: String!
-  ratedMovie: [RatedMovie]! @relation(name: "RatedMovie", onDelete: CASCADE)
+  ratedMovie: [RatedMovie]!
 }
 
 type RatedMovie {
   id: ID! @unique
-  movie: Movie! @relation(name: "RatedMovie", onDelete: SET_NULL)
+  movie: String!
   rate: Int!
   rater: User! @relation(name: "UserRatedMovie", onDelete: SET_NULL)
 }

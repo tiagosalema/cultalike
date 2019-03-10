@@ -1,5 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
+import { getMovies } from "../lib/fetchMovies";
 const imgSize = 300;
 
 const Center = styled.div`
@@ -20,20 +21,9 @@ class Movies extends Component {
   };
 
   componentDidMount() {
-    const apiKey = process.env.API_KEY;
-    const path = "https://api.themoviedb.org/3/";
-    const queries = "language=en-US" + "&page=1" + "&append_to_response=images";
-    const endpoint = `${path}movie/popular?${apiKey}&${queries}`;
-    console.log(endpoint);
-
-    fetch(endpoint, {
-      method: "get"
-    })
-      .then(res => res.json())
-      .then(({ results }) => this.setState({ movies: results }))
-      .catch(err => {
-        console.log(err);
-      });
+    getMovies()
+      .then(({ results: movies }) => this.setState({ movies }))
+      .catch(err => console.log(err));
   }
 
   render() {

@@ -61,6 +61,7 @@ class ReviewedMovies extends Component {
               <thead>
                 <tr>
                   <th>Movie</th>
+                  <th>Rate</th>
                   <th>Delete</th>
                 </tr>
               </thead>
@@ -68,6 +69,7 @@ class ReviewedMovies extends Component {
                 {data.movies.map(movie => (
                   <tr key={movie.id}>
                     <td>{movie.title}</td>
+                    <td>10</td>
                     <td>
                       <DeleteMovie id={movie.id} />
                     </td>
