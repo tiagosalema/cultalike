@@ -12,6 +12,7 @@ const StyledHeader = styled.div`
     }
     margin-right: 30px;
     color: #eee;
+    background-color: inherit;
   }
 `;
 

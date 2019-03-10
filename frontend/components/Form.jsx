@@ -79,35 +79,33 @@ class Form extends Component {
         }}
       >
         {(addRatedMovie, { loading, error }) => {
-          // if (loading) return <p>Loading...</p>;
+          if (loading) return null;
           if (error) return <p>Error, my dude!!</p>;
           return (
-            <React.Fragment>
-              <form onSubmit={e => this.handleSubmit(e, addRatedMovie)}>
-                <input
-                  list="suggestions"
-                  autoComplete="off"
-                  type="text"
-                  name="title"
-                  placeholder="Movie"
-                  value={title}
-                  onChange={this.handleChange}
-                />
-                {movies.length && title.length ? (
-                  <DisplaySearch movies={movies} />
-                ) : null}
-                <input
-                  type="number"
-                  name="rate"
-                  placeholder="Rate"
-                  value={rate}
-                  onChange={this.handleChange}
-                />
-                <button disabled={loading} type="submit" disabled={loading}>
-                  Add rate
-                </button>
-              </form>
-            </React.Fragment>
+            <form onSubmit={e => this.handleSubmit(e, addRatedMovie)}>
+              <input
+                list="suggestions"
+                autoComplete="off"
+                type="text"
+                name="title"
+                placeholder="Movie"
+                value={title}
+                onChange={this.handleChange}
+              />
+              {movies.length && title.length ? (
+                <DisplaySearch movies={movies} />
+              ) : null}
+              <input
+                type="number"
+                name="rate"
+                placeholder="Rate"
+                value={rate}
+                onChange={this.handleChange}
+              />
+              <button disabled={loading} type="submit">
+                Add rate
+              </button>
+            </form>
           );
         }}
       </Mutation>
@@ -116,7 +114,7 @@ class Form extends Component {
 }
 
 export default Form;
-
+export { ADD_REVIEWED_MOVIE_MUTATION };
 // import { withFormik, Form, Field } from "formik";
 
 // const FormTemplate = ({ values, isSubmitting, handleSubmit }) => (
