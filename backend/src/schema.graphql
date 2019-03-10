@@ -30,6 +30,8 @@ type Mutation {
   deleteUser(where: UserWhereUniqueInput!): User
   deleteMovie(where: MovieWhereUniqueInput!): Movie
   deleteRatedMovie(where: RatedMovieWhereUniqueInput!): RatedMovie
+
+  signup(name: String, email: String!, password: String!): User!
 }
 type Query {
   users: [User]!

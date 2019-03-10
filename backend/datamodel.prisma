@@ -1,8 +1,19 @@
+enum Permission {
+  ADMIN
+  USER
+  PERMISSION_UPDATE
+}
+
 type User {
   id: ID! @unique
   name: String!
   ratedMovies: [RatedMovie]!
     @relation(name: "UserRatedMovie", onDelete: CASCADE)
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission]
 }
 
 type Movie {

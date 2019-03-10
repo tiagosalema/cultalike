@@ -1,3 +1,5 @@
-const Users = () => <h1>Users</h1>;
+import DisplayUsers from "../components/DisplayUsers";
+
+const Users = () => <DisplayUsers />;
 
 export default Users;
