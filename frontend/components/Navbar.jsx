@@ -16,13 +16,14 @@ const StyledHeader = styled.div`
   }
 `;
 
-const Header = () => (
+const Navbar = () => (
   <StyledHeader>
     <Linking to="/" title="Home" />
     <Linking to="/users" title="Users" />
     <Linking to="/movies" title="Movies" />
     <Linking to="/myReviews" title="My Reviews" />
+    <Linking to="/signup" title="Signup" />
   </StyledHeader>
 );
 
-export default Header;
+export default Navbar;

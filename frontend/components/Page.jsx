@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Meta from "./Meta";
-import Header from "./Header.jsx";
+import Navbar from "./Navbar.jsx";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 
 const theme = {
@@ -59,7 +59,7 @@ class Page extends Component {
         <StyledPage>
           <Meta />
           <GlobalStyle />
-          <Header />
+          <Navbar />
           <Inner>{this.props.children}</Inner>
         </StyledPage>
       </ThemeProvider>

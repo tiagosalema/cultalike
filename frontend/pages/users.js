@@ -1,5 +1,3 @@
-import DisplayUsers from "../components/DisplayUsers";
-
-const Users = () => <DisplayUsers />;
+import Users from "../components/Users";
 
 export default Users;
