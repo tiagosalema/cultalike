@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Linking from "./common/Linking";
+import User from "./User";
 
 const StyledHeader = styled.div`
   background-color: #3365c0;
@@ -23,6 +24,12 @@ const Navbar = () => (
     <Linking to="/movies" title="Movies" />
     <Linking to="/myReviews" title="My Reviews" />
     <Linking to="/signup" title="Signup" />
+    <User>
+      {({ data: { me } }) => {
+        if (!me) return null;
+        return <span>{me.name}</span>;
+      }}
+    </User>
   </StyledHeader>
 );
 

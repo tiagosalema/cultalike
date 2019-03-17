@@ -9,7 +9,7 @@ type User {
   name: String!
   ratedMovies: [RatedMovie]!
     @relation(name: "UserRatedMovie", onDelete: CASCADE)
-  email: String!
+  email: String! @unique
   password: String!
   resetToken: String
   resetTokenExpiry: String
