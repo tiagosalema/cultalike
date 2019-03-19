@@ -18,11 +18,8 @@ const DisplayUsers = () => (
         return <p>Error, my dude! Check the component DisplayUsers.jsx</p>;
       if (loading) return <p>Loading...</p>;
       return users.map(user => (
-        <div>
-          <Link
-            key={user.id}
-            href={{ pathname: "/users", query: { id: user.id } }}
-          >
+        <div key={user.id}>
+          <Link href={{ pathname: "/users", query: { id: user.id } }}>
             <a>{user.name}</a>
           </Link>
         </div>

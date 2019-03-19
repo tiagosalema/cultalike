@@ -6,7 +6,7 @@ import { CURRENT_USER_QUERY } from "./User";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
-    signin(email: $name, password: $password) {
+    signin(email: $email, password: $password) {
       id
       name
       email
@@ -18,8 +18,17 @@ const SIGNIN_MUTATION = gql`
 
 class Signin extends Component {
   state = {
-    name: "",
+    email: "",
     password: ""
+  };
+
+  handleSignin = signin => {
+    console.log("Signed In!");
+    signin({ variables: this.state });
+    this.setState({
+      email: "",
+      password: ""
+    });
   };
 
   render() {
@@ -35,7 +44,7 @@ class Signin extends Component {
               render={({ handleChange }) => {
                 const { email, password } = this.state;
                 return (
-                  <Form onSubmit={signin}>
+                  <Form onSubmit={() => this.handleSignin(signin)}>
                     {error && <p>{error.message}</p>}
                     <h3>Sign in:</h3>
                     <Field
@@ -58,7 +67,11 @@ class Signin extends Component {
                       name="password"
                       placeholder="Password"
                     />
-                    <button type="submit" onClick={signin} disabled={loading}>
+                    <button
+                      type="submit"
+                      onClick={() => this.handleSignin(signin)}
+                      disabled={loading}
+                    >
                       Sign In
                     </button>
                   </Form>

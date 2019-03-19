@@ -25,5 +25,9 @@ server.start(
     }
   },
   deets =>
-    console.log(`Server is running on http://localhost:${deets.port}, my guy`)
+    console.log(
+      `
+${">".repeat(60)} Server running on http://localhost:${deets.port} ${"<".repeat(60)}
+`
+    )
 );

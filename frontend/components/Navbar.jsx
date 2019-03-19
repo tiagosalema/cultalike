@@ -22,12 +22,16 @@ const Navbar = () => (
     <Linking to="/" title="Home" />
     <Linking to="/users" title="Users" />
     <Linking to="/movies" title="Movies" />
-    <Linking to="/myReviews" title="My Reviews" />
-    <Linking to="/signup" title="Signup" />
+
     <User>
       {({ data: { me } }) => {
-        if (!me) return null;
-        return <span>{me.name}</span>;
+        if (!me) return <Linking to="/signin" title="Signin" />;
+        return (
+          <>
+            <Linking to="/myReviews" title="My Reviews" />
+            <span>{me.name}</span>
+          </>
+        );
       }}
     </User>
   </StyledHeader>

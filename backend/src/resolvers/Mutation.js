@@ -24,23 +24,33 @@ const Mutations = {
       },
       info
     );
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET); // Creates the JWT
+    const token = jwt.sign(
+      { userId: user.id, whatsThis: "A sign up token" },
+      process.env.APP_SECRET,
+      {
+        expiresIn: "365d"
+      }
+    ); // Creates the JWT
     ctx.response.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365 // miliseconds = 1 year
+      httpOnly: true
     });
     return user; //returns user to the browser
   },
 
   async signin(parent, { email, password }, ctx, info) {
-    const user = ctx.db.query.user({ where: { email } });
+    const user = await ctx.db.query.user({ where: { email } }, info);
     if (!user) throw new Error("No such user found");
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) throw new Error("Password is wrong");
-    const token = jwt.sign({ signIn: user.id }, process.env.APP_SECRET);
+    const token = jwt.sign(
+      { userId: user.id, whatsThis: "A sign in token" },
+      process.env.APP_SECRET,
+      {
+        expiresIn: "365d"
+      }
+    );
     ctx.response.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365
+      httpOnly: true
     });
     return user;
   }
