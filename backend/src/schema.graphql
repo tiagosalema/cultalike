@@ -22,6 +22,9 @@
 #   items: [Item]!
 #   item(where: ItemWhereUniqueInput!): Item
 # }
+type GoodbyeMessage {
+  message: String
+}
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
@@ -33,6 +36,7 @@ type Mutation {
 
   signup(name: String, email: String!, password: String!): User!
   signin(email: String!, password: String!): User!
+  signout: GoodbyeMessage
 }
 type Query {
   users: [User]!

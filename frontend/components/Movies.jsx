@@ -2,9 +2,11 @@ import { Component } from "react";
 import styled from "styled-components";
 import { getMovies } from "../lib/fetchMovies";
 import Head from "next/head";
+import { Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 import { ADD_REVIEWED_MOVIE_MUTATION } from "./Form";
 import { ALL_REVIEWED_MOVIES_QUERY } from "./ReviewedMovies";
+import { CURRENT_USER_QUERY } from "./User";
 
 const imgSize = 300;
 
@@ -23,7 +25,7 @@ const ItemsList = styled.div`
 class Movies extends Component {
   state = {
     movies: {},
-    ratedMovies: [{ title: "", rate: "" }]
+    ratedMovies: { title: "", rate: "" }
   };
 
   componentDidMount() {
@@ -33,14 +35,14 @@ class Movies extends Component {
   }
 
   handleChange = ({ target: { value: rate } }, title) => {
-    // Change the following line to enable rating of multiple movies
     const ratedMovies = { title, rate };
-    this.setState({ ratedMovies: [ratedMovies] });
+    this.setState({ ratedMovies });
   };
 
-  handleSubmit = async (e, addRatedMovie) => {
+  handleSubmit = async (e, addRatedMovie, userId) => {
     e.preventDefault();
-    const res = await addRatedMovie({ variables: this.state.ratedMovies[0] });
+    const variables = { ...this.state.ratedMovies, userId };
+    await addRatedMovie({ variables });
   };
 
   handleUpdate = (cache, payload) => {
@@ -50,7 +52,7 @@ class Movies extends Component {
   };
 
   render() {
-    const { ratedMovies } = this.state;
+    const { title, rate } = this.state.ratedMovies;
     return (
       <Center>
         <Head>
@@ -65,61 +67,55 @@ class Movies extends Component {
               <div key={movie.id}>
                 <div className="container">
                   <img
-                    src={
-                      "https://image.tmdb.org/t/p/w" +
-                      imgSize +
-                      movie.poster_path
-                    }
+                    src={"https://image.tmdb.org/t/p/w" + imgSize + movie.poster_path}
                     alt={movie.title}
                     style={{ width: "100%" }}
                     onClick={this.toggleRateDisplay}
                   />
                   <div className="centered">
-                    <Mutation
-                      mutation={ADD_REVIEWED_MOVIE_MUTATION}
-                      update={this.handleUpdate}
-                      optimisticResponse={{
-                        __typename: "Mutation",
-                        createRatedMovie: {
-                          __typename: "RatedMovie",
-                          id: "cjswkyxg517bpski7cz119xvv",
-                          movie: ratedMovies[0].title,
-                          rate: ratedMovies[0].rate,
-                          rater: { __typename: "User", name: "tiago" }
-                        }
-                      }}
-                    >
-                      {(addRatedMovie, { loading, error }) => {
-                        if (loading) return null;
-                        if (error) return <p>Error, my dude!!</p>;
+                    <Query query={CURRENT_USER_QUERY}>
+                      {({ data: { me } }) => {
+                        if (!me) return null;
+                        const { id: userId } = me;
                         return (
-                          <form
-                            onSubmit={e =>
-                              this.handleSubmit(e, addRatedMovie, movie)
-                            }
+                          <Mutation
+                            mutation={ADD_REVIEWED_MOVIE_MUTATION}
+                            update={this.handleUpdate}
+                            optimisticResponse={{
+                              __typename: "Mutation",
+                              createRatedMovie: {
+                                __typename: "RatedMovie",
+                                id: userId,
+                                movie: title,
+                                rate: rate,
+                                rater: { __typename: "User", name: "tiago" }
+                              }
+                            }}
                           >
-                            <label>
-                              Rate:
-                              <input
-                                type="number"
-                                value={
-                                  ratedMovies.find(c => c.title === movie.title)
-                                    ? ratedMovies[
-                                        ratedMovies.findIndex(
-                                          c => c.title === movie.title
-                                        )
-                                      ].rate
-                                    : ""
-                                }
-                                onChange={e =>
-                                  this.handleChange(e, movie.title)
-                                }
-                              />
-                            </label>
-                          </form>
+                            {(addRatedMovie, { loading, error }) => {
+                              if (loading) return null;
+                              if (error) return <p>Error, my dude!!</p>;
+                              return (
+                                <form
+                                  onSubmit={e =>
+                                    this.handleSubmit(e, addRatedMovie, userId)
+                                  }
+                                >
+                                  <label>
+                                    Rate:
+                                    <input
+                                      type="number"
+                                      value={rate}
+                                      onChange={e => this.handleChange(e, movie.title)}
+                                    />
+                                  </label>
+                                </form>
+                              );
+                            }}
+                          </Mutation>
                         );
                       }}
-                    </Mutation>
+                    </Query>
                   </div>
                 </div>
                 <p>{movie.title}</p>

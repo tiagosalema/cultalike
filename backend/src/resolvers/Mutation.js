@@ -36,7 +36,6 @@ const Mutations = {
     });
     return user; //returns user to the browser
   },
-
   async signin(parent, { email, password }, ctx, info) {
     const user = await ctx.db.query.user({ where: { email } }, info);
     if (!user) throw new Error("No such user found");
@@ -53,6 +52,10 @@ const Mutations = {
       httpOnly: true
     });
     return user;
+  },
+  signout(parent, args, ctx, info) {
+    ctx.response.clearCookie("token");
+    return { message: "Goodbye!" };
   }
 };
 

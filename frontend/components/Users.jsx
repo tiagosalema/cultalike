@@ -14,8 +14,7 @@ const ALL_USERS_QUERY = gql`
 const DisplayUsers = () => (
   <Query query={ALL_USERS_QUERY}>
     {({ data: { users }, loading, error }) => {
-      if (error)
-        return <p>Error, my dude! Check the component DisplayUsers.jsx</p>;
+      if (error) return <p>Error, my dude! Check the component DisplayUsers.jsx</p>;
       if (loading) return <p>Loading...</p>;
       return users.map(user => (
         <div key={user.id}>

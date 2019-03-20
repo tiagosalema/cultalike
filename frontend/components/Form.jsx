@@ -1,21 +1,20 @@
 import React from "react";
 import { gql } from "apollo-boost";
+import { Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 import { Component } from "react";
 
 import { getMovies } from "../lib/fetchMovies";
 
 import { ALL_REVIEWED_MOVIES_QUERY } from "./ReviewedMovies";
+import { CURRENT_USER_QUERY } from "./User";
 import DisplaySearch from "./DisplaySearch";
+import Button from "react-bootstrap/Button";
 
 const ADD_REVIEWED_MOVIE_MUTATION = gql`
-  mutation ADD_REVIEWED_MOVIE_MUTATION($title: String!, $rate: Int!) {
+  mutation ADD_REVIEWED_MOVIE_MUTATION($title: String!, $raterId: ID!, $rate: Int!) {
     createRatedMovie(
-      data: {
-        movie: $title
-        rater: { connect: { id: "cjsug50e1fv830b87zxjtijfs" } }
-        rate: $rate
-      }
+      data: { movie: $title, rater: { connect: { id: $raterId } }, rate: $rate }
     ) {
       id
       movie
@@ -39,9 +38,10 @@ class Form extends Component {
       .catch(err => console.log(err));
   }
 
-  handleSubmit = async (e, addRatedMovie) => {
+  handleSubmit = async (e, addRatedMovie, raterId) => {
     e.preventDefault();
-    const res = await addRatedMovie({ variables: this.state.inputs });
+    const variables = { ...this.state.inputs, raterId };
+    await addRatedMovie({ variables });
   };
 
   handleChange = ({ target }) => {
@@ -52,6 +52,8 @@ class Form extends Component {
   };
 
   handleUpdate = (cache, payload) => {
+    console.log(payload);
+
     const data = cache.readQuery({ query: ALL_REVIEWED_MOVIES_QUERY });
     data.ratedMovies.push(payload.data.createRatedMovie);
     cache.writeQuery({ query: ALL_REVIEWED_MOVIES_QUERY, data });
@@ -63,98 +65,65 @@ class Form extends Component {
       inputs: { title, rate }
     } = this.state;
     return (
-      <Mutation
-        mutation={ADD_REVIEWED_MOVIE_MUTATION}
-        variables={this.state.input}
-        update={this.handleUpdate}
-        optimisticResponse={{
-          __typename: "Mutation",
-          createRatedMovie: {
-            __typename: "RatedMovie",
-            id: "cjswkyxg517bpski7cz119xvv",
-            movie: title,
-            rate: rate,
-            rater: { __typename: "User", name: "tiago" }
+      <Query query={CURRENT_USER_QUERY}>
+        {({
+          data: {
+            me: { id: raterId, name: raterName }
           }
-        }}
-      >
-        {(addRatedMovie, { loading, error }) => {
-          if (loading) return null;
-          if (error) return <p>Error, my dude!!</p>;
+        }) => {
           return (
-            <form onSubmit={e => this.handleSubmit(e, addRatedMovie)}>
-              <input
-                list="suggestions"
-                autoComplete="off"
-                type="text"
-                name="title"
-                placeholder="Movie"
-                value={title}
-                onChange={this.handleChange}
-              />
-              {movies.length && title.length ? (
-                <DisplaySearch movies={movies} />
-              ) : null}
-              <input
-                type="number"
-                name="rate"
-                placeholder="Rate"
-                value={rate}
-                onChange={this.handleChange}
-              />
-              <button disabled={loading} type="submit">
-                Add rate
-              </button>
-            </form>
+            <Mutation
+              mutation={ADD_REVIEWED_MOVIE_MUTATION}
+              variables={this.state.input}
+              update={this.handleUpdate}
+              optimisticResponse={{
+                __typename: "Mutation",
+                createRatedMovie: {
+                  __typename: "RatedMovie",
+                  id: "optimistic id",
+                  movie: title,
+                  rate,
+                  rater: { __typename: "User", name: raterName }
+                }
+              }}
+            >
+              {(addRatedMovie, { loading, error }) => {
+                if (error) return <p>Error, my dude!!</p>;
+                return (
+                  <form onSubmit={e => this.handleSubmit(e, addRatedMovie, raterId)}>
+                    <input
+                      list="suggestions"
+                      autoComplete="off"
+                      type="text"
+                      name="title"
+                      placeholder="Movie"
+                      value={title}
+                      onChange={this.handleChange}
+                    />
+                    {movies.length && title.length ? (
+                      <DisplaySearch movies={movies} />
+                    ) : null}
+                    <input
+                      type="number"
+                      name="rate"
+                      placeholder="Rate"
+                      value={rate}
+                      onChange={this.handleChange}
+                    />
+                    <button disabled={loading} type="submit">
+                      Add rate
+                    </button>
+                    <Button bsStyle="warning">Bootstrap Button</Button>
+                  </form>
+                );
+              }}
+            </Mutation>
           );
         }}
-      </Mutation>
+      </Query>
     );
   }
 }
 
 export default Form;
 export { ADD_REVIEWED_MOVIE_MUTATION };
-// import { withFormik, Form, Field } from "formik";
-
-// const FormTemplate = ({ values, isSubmitting, handleSubmit }) => (
-//   <Mutation mutation={ADD_REVIEWED_MOVIE_MUTATION} variables={values}>
-//     {(addMovie, payload) => {
-//       return (
-//         <form onSubmit={() => handleSubmit(addMovie)}>
-//           <Field type="text" name="title" placeholder="Movie" />
-//           <Field type="number" name="rate" placeholder="Rate" />
-//           <button type="submit" disabled={isSubmitting}>
-//             Add rate
-//           </button>
-//         </form>
-//       );
-//     }}
-//   </Mutation>
-// );
-
-// const FormikApp = withFormik({
-//   mapPropsToValues({ title, rate }) {
-//     return {
-//       title: title || "",
-//       rate: rate || ""
-//     };
-//   },
-//   handleSubmit(addMovie, values, { resetForm, setErrors, setSubmitting }) {
-//     const res = addMovie({ variables: values });
-//     console.log(res);
-
-//     setTimeout(() => {
-//       console.log(values);
-
-//       if (values.title === "xxx") {
-//         setErrors({ title: "Movie already exists" });
-//       } else {
-//         resetForm();
-//       }
-//       setSubmitting(false);
-//     }, 500);
-//   }
-// })(FormTemplate);
-
-// export default FormikApp;

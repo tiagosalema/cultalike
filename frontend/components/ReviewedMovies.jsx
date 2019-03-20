@@ -59,6 +59,7 @@ class ReviewedMovies extends Component {
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error, my guy: {error.message}</p>;
+          console.log(data);
 
           return (
             <Table>
@@ -66,6 +67,7 @@ class ReviewedMovies extends Component {
                 <tr>
                   <th>Movie</th>
                   <th>Rate</th>
+                  <th>User</th>
                   <th>Delete</th>
                 </tr>
               </thead>
@@ -74,6 +76,7 @@ class ReviewedMovies extends Component {
                   <tr key={ratedMovie.id}>
                     <td>{ratedMovie.movie}</td>
                     <td>{ratedMovie.rate}</td>
+                    <td>{ratedMovie.rater.name}</td>
                     <td>
                       <DeleteMovie id={ratedMovie.id} />
                     </td>

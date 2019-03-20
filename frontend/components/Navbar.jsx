@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Linking from "./common/Linking";
 import User from "./User";
+import Signout from "./Signout";
 
 const StyledHeader = styled.div`
   background-color: #3365c0;
@@ -18,23 +19,25 @@ const StyledHeader = styled.div`
 `;
 
 const Navbar = () => (
-  <StyledHeader>
-    <Linking to="/" title="Home" />
-    <Linking to="/users" title="Users" />
-    <Linking to="/movies" title="Movies" />
-
-    <User>
-      {({ data: { me } }) => {
-        if (!me) return <Linking to="/signin" title="Signin" />;
-        return (
-          <>
-            <Linking to="/myReviews" title="My Reviews" />
-            <span>{me.name}</span>
-          </>
-        );
-      }}
-    </User>
-  </StyledHeader>
+  <User>
+    {({ data: { me } }) => {
+      return (
+        <StyledHeader>
+          <Linking to="/" title="Home" />
+          <Linking to="/users" title="Users" />
+          <Linking to="/movies" title="Movies" />
+          {!me && <Linking to="/signin" title="Signin" />}
+          {me && (
+            <>
+              <Linking to="/myReviews" title="My Reviews" />
+              <span>{me.name}</span>
+              <Signout />
+            </>
+          )}
+        </StyledHeader>
+      );
+    }}
+  </User>
 );
 
 export default Navbar;
