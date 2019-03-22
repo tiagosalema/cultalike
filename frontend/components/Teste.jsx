@@ -1,14 +1,41 @@
-const withChange1 = Comp => props => <Comp {...props} />;
+import { Component } from "react";
 
-const withChange2 = Comp => props => <Comp {...props} />;
+class Field extends Component {
+  handleChange = e => {
+    this.props.onChange(this.props.id, e.target.value);
+  };
 
-const Comp_0 = () => <p>Hello!</p>;
+  render() {
+    return (
+      <div>
+        <input onChange={this.handleChange} value={this.props.value} />
+      </div>
+    );
+  }
+}
 
-const Comp_1 = withChange1(Comp_0);
-const Comp_2 = withChange2(Comp_1);
+class Form extends Component {
+  state = {};
 
-const App = () => <Comp_2 isTrue={0} />;
+  handleFieldChange = (fieldId, value) => {
+    this.setState({ [fieldId]: value });
+  };
 
-const Teste = () => <App />;
+  render() {
+    const fields = ["field1", "field2", "anotherField"];
+    return (
+      <div>
+        {fields.map(field => (
+          <Field
+            key={field}
+            id={field}
+            onChange={this.handleFieldChange}
+            value={this.state[field]}
+          />
+        ))}
+      </div>
+    );
+  }
+}
 
-export default Teste;
+export default Form;

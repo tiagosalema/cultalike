@@ -24,7 +24,7 @@ class Signout extends Component {
         {signout => (
           <button
             className="btn"
-            style={{ color: "white", margin: "0 0 0 0" }}
+            style={{ margin: "0 0 0 0" }}
             onClick={() => {
               Router.push("/");
               signout();

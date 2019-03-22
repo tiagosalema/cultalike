@@ -1,13 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+
 import Linking from "./common/Linking";
 import User from "./User";
 import Signout from "./Signout";
+import "./Navbar.scss";
 
 const StyledHeader = styled.div`
   background-color: #3365c0;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-
+  display: flex;
+  justify-content: space-evenly;
   > * {
     &:first-child {
       margin-left: 20px;
@@ -30,7 +33,7 @@ const Navbar = () => (
           {me && (
             <>
               <Linking to="/myReviews" title="My Reviews" />
-              <span>{me.name}</span>
+              <span sytle={{ flex: 4 }}>{me.name}</span>
               <Signout />
             </>
           )}

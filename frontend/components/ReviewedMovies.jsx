@@ -59,8 +59,6 @@ class ReviewedMovies extends Component {
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error, my guy: {error.message}</p>;
-          console.log(data);
-
           return (
             <Table>
               <thead>

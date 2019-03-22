@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Meta from "./Meta";
-import Navbar from "./Navbar2.jsx";
+import Navbar from "./Navbar.jsx";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 
 const theme = {
