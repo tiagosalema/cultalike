@@ -1,5 +1,11 @@
 import "../scss/index.scss";
+import Home from "../components/Home";
 
-const Home = () => <h1>Home!</h1>;
+const Index = () => (
+  <div>
+    <h1>Suggestions</h1>
+    <Home />
+  </div>
+);
 
-export default Home;
+export default Index;

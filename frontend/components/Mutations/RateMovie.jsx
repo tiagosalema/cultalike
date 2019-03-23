@@ -1,8 +1,6 @@
-import React from "react";
-import { Component } from "react";
+import React, { Component } from "react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 
 // Queries
 import { CURRENT_USER_QUERY } from "../User";
@@ -18,6 +16,7 @@ const ADD_REVIEWED_MOVIE_MUTATION = gql`
       rate
       rater {
         name
+        id
       }
     }
   }
@@ -42,11 +41,7 @@ class RateMovie extends Component {
     } = this.props;
     return (
       <Query query={CURRENT_USER_QUERY}>
-        {({
-          data: {
-            me: { id: raterId, name: raterName }
-          }
-        }) => {
+        {({ data: { me } }) => {
           return (
             <Mutation
               mutation={ADD_REVIEWED_MOVIE_MUTATION}
@@ -59,14 +54,19 @@ class RateMovie extends Component {
                   id: "optimistic id",
                   movie: title,
                   rate,
-                  rater: { __typename: "User", name: raterName }
+                  rater: {
+                    __typename: "User",
+                    id: me ? me.id : "",
+                    name: me ? me.name : ""
+                  }
                 }
               }}
             >
               {(addRatedMovie, { error, loading }) => {
                 if (error) return <p>Error, my dude!!</p>;
+                if (!me) return null;
                 return (
-                  <form onSubmit={e => this.handleSubmit(e, addRatedMovie, raterId)}>
+                  <form onSubmit={e => this.handleSubmit(e, addRatedMovie, me.id)}>
                     {React.Children.map(this.props.children, child =>
                       React.cloneElement(child, { loading })
                     )}

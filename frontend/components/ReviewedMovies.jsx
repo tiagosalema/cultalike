@@ -31,6 +31,7 @@ const ALL_REVIEWED_MOVIES_QUERY = gql`
       rate
       rater {
         name
+        id
       }
     }
   }

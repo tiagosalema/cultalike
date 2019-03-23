@@ -1,0 +1,95 @@
+@import "../_vars.scss";
+.card {
+  // FUNCTIONALITY
+  perspective: 150rem;
+  -moz-perspective: 150rem;
+  position: relative;
+  height: 430px;
+
+  &__side {
+    height: 430px;
+    transition: all 0.8s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1.5rem 4rem rgba(black, 0.15);
+
+    &--front {
+      background-color: white;
+    }
+
+    &--back {
+      transform: rotateY(180deg);
+      &-notRated {
+        background-image: linear-gradient(
+          to right bottom,
+          $color-secondary-light,
+          rgb(133, 8, 8)
+        );
+      }
+      &-rated {
+        background-image: linear-gradient(
+          to right bottom,
+          rgb(56, 202, 64),
+          rgb(23, 83, 26)
+        );
+      }
+    }
+  }
+  &__heading {
+    font-family: "Belleza", sans-serif;
+    background-color: rgb(48, 46, 46);
+    font-size: 1.6rem;
+    font-weight: 300;
+    text-align: center;
+    color: rgb(240, 235, 235);
+    position: absolute;
+    text-align: center;
+    top: 0;
+    padding: 1rem 0;
+    width: 100%;
+    text-shadow: 2px 2px black;
+  }
+  &__content {
+    font-size: 5rem;
+    font-weight: 300;
+    text-align: center;
+    color: black;
+    -webkit-text-fill-color: rgb(211, 243, 222);
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgb(8, 61, 8);
+    position: relative;
+    text-align: center;
+    bottom: -50%;
+  }
+
+  &:hover &__side--front {
+    transform: rotateY(-180deg);
+  }
+
+  &:hover &__side--back {
+    transform: rotateY(0);
+  }
+  input {
+    font-family: "Lato", sans-serif;
+    font-size: 4rem;
+    text-align: center;
+    position: absolute;
+    top: 65%;
+    width: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px;
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    border: 0 solid;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.521);
+    &:focus {
+      outline: none;
+    }
+  }
+}

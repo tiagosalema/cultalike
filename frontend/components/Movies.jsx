@@ -8,6 +8,9 @@ import { getMovies } from "../lib/fetchMovies";
 import RateMovie from "./Mutations/RateMovie";
 import MovieInput from "./MovieInput";
 import { ALL_REVIEWED_MOVIES_QUERY } from "./ReviewedMovies";
+import { CURRENT_USER_QUERY } from "./User";
+
+import "../scss/components/_card.scss";
 
 const imgSize = 300;
 
@@ -52,45 +55,62 @@ class Movies extends Component {
           ) : (
             <Query query={ALL_REVIEWED_MOVIES_QUERY}>
               {({ data, loading }) => {
-                return this.state.movies.map(movie => {
-                  const { title } = movie;
-                  return (
-                    <div key={movie.id}>
-                      <div className="container">
-                        <img
-                          src={
-                            "https://image.tmdb.org/t/p/w" + imgSize + movie.poster_path
-                          }
-                          alt={title}
-                          style={{ width: "100%" }}
-                        />
-                        <div className="centered">
-                          {!loading &&
-                          data.ratedMovies.some(movie => movie.movie === title) ? (
-                            <div style={{ backgroundColor: "green", padding: "10px" }}>
-                              Rated!
+                return (
+                  <Query query={CURRENT_USER_QUERY}>
+                    {({ data: { me } }) => {
+                      return this.state.movies.map(movie => {
+                        const { title } = movie;
+                        return (
+                          <div key={movie.id} className="card">
+                            <div className="card__side card__side--front">
+                              <img
+                                src={
+                                  "https://image.tmdb.org/t/p/w" +
+                                  imgSize +
+                                  movie.poster_path
+                                }
+                                alt={title}
+                                style={{ width: "100%" }}
+                              />
                             </div>
-                          ) : (
-                            <RateMovie
-                              inputs={{ title, rate: this.state.rateMovie[title] }}
-                            >
-                              <label>
-                                Rate:
-                                <MovieInput
-                                  title={title}
-                                  value={this.state.rateMovie[title]}
-                                  onChange={this.handleChange}
-                                  onSubmit={this.handleSubmit}
-                                />
-                              </label>
-                            </RateMovie>
-                          )}
-                        </div>
-                      </div>
-                      <p>{title}</p>
-                    </div>
-                  );
-                });
+                            {!loading &&
+                            me &&
+                            data.ratedMovies.some(
+                              ratedMovie =>
+                                ratedMovie.movie === title &&
+                                me.id === ratedMovie.rater.id
+                            ) ? (
+                              <div className="card__side card__side--back card__side--back-rated">
+                                <div className="card__heading">{title}</div>
+                                <div className="card__content">Rated!</div>
+                              </div>
+                            ) : (
+                              <div className="card__side card__side--back card__side--back-notRated">
+                                <div className="card__heading">{title}</div>
+                                <RateMovie
+                                  inputs={{
+                                    title,
+                                    rate: this.state.rateMovie[title]
+                                  }}
+                                >
+                                  <label>
+                                    <MovieInput
+                                      className="card__input"
+                                      title={title}
+                                      value={this.state.rateMovie[title]}
+                                      onChange={this.handleChange}
+                                      onSubmit={this.handleSubmit}
+                                    />
+                                  </label>
+                                </RateMovie>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      });
+                    }}
+                  </Query>
+                );
               }}
             </Query>
           )}
