@@ -7,8 +7,11 @@ import Signout from "./Signout";
 import "./Navbar.scss";
 
 const StyledHeader = styled.div`
+  width: 100%;
+  z-index: 100;
+  position: fixed;
   background-color: #3365c0;
-  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 4px rgba(40, 40, 40, 0.7);
   display: flex;
   justify-content: space-evenly;
   > * {
@@ -17,7 +20,7 @@ const StyledHeader = styled.div`
     }
     margin-right: 30px;
     color: #eee;
-    background-color: inherit;
+    background-color: inherit; /* for the button  */
   }
 `;
 

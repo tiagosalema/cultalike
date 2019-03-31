@@ -61,7 +61,10 @@ class Page extends Component {
           <StyledPage>
             <Meta />
             <GlobalStyle />
-            <Inner>{this.props.children}</Inner>
+            <Inner>
+              <br />
+              {this.props.children}
+            </Inner>
           </StyledPage>
         </ThemeProvider>
       </>
