@@ -5,11 +5,7 @@ import { gql } from "apollo-boost";
 import { CURRENT_USER_QUERY } from "./User";
 
 const CREATE_USER_MUTATION = gql`
-  mutation CREATE_USER_MUTATION(
-    $name: String!
-    $email: String!
-    $password: String!
-  ) {
+  mutation CREATE_USER_MUTATION($name: String!, $email: String!, $password: String!) {
     signup(name: $name, email: $email, password: $password) {
       id
       name
